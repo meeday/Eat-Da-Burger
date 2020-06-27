@@ -13,3 +13,18 @@ router.get("/", (req, res) => {
     res.render("index", burgerObj);
   });
 });
+
+router.post("/api/burgers", (req, res) => {
+  burger.insertOne(["burger_name", "devoured"],
+  [
+    req.body.name, false
+  ], 
+    result => {
+      if(result.affectedRows === 0) {
+        return res.status(404).end();
+      }
+      res.status(201).end();
+    });
+});
+
+
