@@ -21,10 +21,18 @@ router.post("/api/burgers", (req, res) => {
   ], 
     result => {
       if(result.affectedRows === 0) {
-        return res.status(404).end();
+        return res.status(400).end();
       }
       res.status(201).end();
     });
 });
 
-
+router.put("/api/burgers/:id", (req, res) => {
+  const condition = `id = ${req.params.id}`;
+  burger.updateOne({devoured: true}, condition, result => {
+    if(result.affectedRows === 0) {
+      return res.status(400).end();
+    }
+    res.status(202).end();
+  });
+})
