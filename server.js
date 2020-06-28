@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static("public"));
+app.use('/public', express.static('public'));
 
 const routes = require("./controllers/burgers_controller.js");
 app.use(routes);
