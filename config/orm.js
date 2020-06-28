@@ -43,17 +43,12 @@ const orm = {
   },
 
   insertOne: (tableInput, cols, vals, cb) => {
-    const queryString = `INSERT INTO ${tableInput};`
-
-    queryString += " (";
-    queryString += cols.toString();
-    queryString += ") ";
-    queryString += "VALUES (";
-    queryString += printQuestionMarks(vals.length);
-    queryString += ") ";
-
+    const QuestionMarks = printQuestionMarks(vals.length);
+    
+    const queryString = `INSERT INTO ${tableInput} (${cols.toString()}) VALUES (${QuestionMarks})`;
+  
     console.log(queryString);
-    connection.query(queryString, (err, result) => {
+    connection.query(queryString, vals, (err, result) => {
       if (err) {
         throw err;
 
@@ -64,13 +59,8 @@ const orm = {
   },
 
   updateOne: (tableInput, objColVals, condition, cb) => {
-    const queryString = `UPDATE ${tableInput};`
-
-    queryString += " SET ";
-    queryString += objToSql(objColVals);
-    queryString += " WHERE ";
-    queryString += condition;
-
+    const queryString = `UPDATE ${tableInput} SET ${objToSql(objColVals)} WHERE ${condition}`
+   
     console.log(queryString);
     connection.query(queryString, (err, result) => {
       if (err) {
