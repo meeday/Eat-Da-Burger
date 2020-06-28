@@ -5,7 +5,7 @@
     <div class="row">
     <h2>Add A Burger Option</h2>
       <div class="col s12">
-        <form action="/burgers" method="POST">
+        <form class="addBurger" action="/burgers" method="POST">
           <input type="text" id="name" name="burger_name" placeholder="Add a burger">
           <button type="submit" class="addBurgerButton">Add The Burger</button>
         </form>
@@ -17,8 +17,7 @@
         {{#each burgers}}
           {{#unless this.devoured}}
             <div>
-              <form action="/burgers/{{this.id}}?_method=PUT" method="POST">
-                <button type="submit" class='burgerAvailable'> {{this.burger_name}}</button>
+                <p>{{this.burger_name}}<span><button data-id="{{this.id}}" class="devour waves-effect waves-light btn">Devour!</button></span>
               </form>
             </div>
           {{/unless}}
