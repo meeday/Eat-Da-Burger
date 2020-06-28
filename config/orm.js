@@ -1,76 +1,85 @@
+
 const connection = require("./connection.js");
 
-const printQuestionMarks = num => {
-  const arr = [];
-  for (i = 0; i < num; i++) {
-    arr.push("?");
-  }
-  return arr.toString();
-}
 
-const objToSql = ob => {
+const questionMarksString = num => {
+  let str = "";
+
+  if (num > 0) {
+    str += "?";
+  }
+
+  for (let i = 1; i < num; i++) {
+    str += ",?";
+  }
+
+  return str;
+};
+
+const objToSqlString = obj => {
   const arr = [];
-  for (var key in ob) {
-    var value = ob[key];
-    // check to skip hidden properties
-    if (Object.hasOwnProperty.call(ob, key)) {
-      // if string with spaces, add quotations (Lana Del Grey => 'Lana Del Grey')
-      if (typeof value === "string" && value.indexOf(" ") >= 0) {
-        value = "'" + value + "'";
+
+  for (let key in obj) {
+    let value = obj[key];
+
+    if (Object.hasOwnProperty.call(obj, key)) {
+      if (typeof value === "string" && value.indexOf(" ") !== -1) {
+        value = `'${value}'`;
       }
-      // e.g. {name: 'Lana Del Grey'} => ["name='Lana Del Grey'"]
-      // e.g. {sleepy: true} => ["sleepy=true"]
-      arr.push(key + "=" + value);
+      arr.push(`${key}=${value}`);
     }
   }
 
-  // translate array of strings to a single comma-separated string
   return arr.toString();
-}
+};
 
 const orm = {
-  selectAll: (tableInput, cb) => {
-    const queryString = `SELECT * FROM ${tableInput};`;
-    connection.query(queryString, (err, result) => {
-      if (err) {
-        throw err;
+    selectAll: (table, cb) => {
 
-      }
-      cb(result);
+        const queryString = `SELECT * FROM ${table};`;
 
-    });
+        connection.query(queryString, (err, result) => {
+            if (err) {
+                throw err;
+            }
 
-  },
-
-  insertOne: (tableInput, cols, vals, cb) => {
-    const QuestionMarks = printQuestionMarks(vals.length);
+            cb(result);
+        });
+    },
     
-    const queryString = `INSERT INTO ${tableInput} (${cols.toString()}) VALUES (${QuestionMarks})`;
-  
-    console.log(queryString);
-    connection.query(queryString, vals, (err, result) => {
-      if (err) {
-        throw err;
-
-      }
-      cb(result);
-
-    });
-  },
-
-  updateOne: (tableInput, objColVals, condition, cb) => {
-    const queryString = `UPDATE ${tableInput} SET ${objToSql(objColVals)} WHERE ${condition}`
-   
-    console.log(queryString);
-    connection.query(queryString, (err, result) => {
-      if (err) {
-        throw err;
-
-      }
-      cb(result);
-
-    });
-  },
+    insertOne: (table, cols, vals, cb) => {
+        
+        const queryQuestionMarks = questionMarksString(vals.length);
+        
+        const queryString = `INSERT INTO ${table} (${cols.toString()}) 
+        VALUES (${queryQuestionMarks})`;
+        
+        connection.query(queryString, vals, (err, result) => {
+            if (err) {
+                throw err;
+            }
+            
+            cb(result);
+        });
+    },
+    
+    
+    updateOne: (table, objColVals, condition, cb) => {
+        
+        const objColValsString = objToSqlString(objColVals);
+        
+        const queryString = `UPDATE ${table} 
+        SET ${objColValsString} 
+        WHERE ${condition};`;
+        
+        connection.query(queryString, (err, result) => {
+            if (err) {
+                throw err;
+            }
+            
+           cb(result);
+        });
+    }
 };
 
 module.exports = orm;
