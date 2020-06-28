@@ -1,22 +1,22 @@
 const mysql = require("mysql");
-const dotenv = require("dotenv");
 
 const config = require("./config");
 
-dotenv.config();
-
-
-let connection;
-
-if(process.env.DATABASE_URL) {
- connection = mysql.createConnection(process.env.DATABASE_URL);
-} else
- connection = mysql.createConnection({
+ const connection = mysql.createConnection({
   host: config.host,
   port:3306,
   user:config.user,
   password: config.password,
   database: "burgers_db"
 });
+
+connection.connect(function(err) {
+  if (err) {
+    console.error('ERROR: MySQL connection error -- ' + err.stack + '\n\n');
+    return;
+  }
+  console.log('Connected to MySQL database as id ' + connection.threadId + '\n\n');
+});
+// Make the connection to MySQL
 
 module.exports = connection;
