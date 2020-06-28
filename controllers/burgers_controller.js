@@ -6,21 +6,18 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   burger.selectAll(data => {
-    const burgerObj = {
-      burgers: data
-    };
+    const burgerObj = { burgers: data };
+    
     console.log(burgerObj);
     res.render("index", burgerObj);
   });
 });
 
 router.post("/api/burgers", (req, res) => {
-  burger.insertOne(["burger_name", "devoured"],
-  [
-    req.body.name, false
-  ], 
-    result => {
-      if(result.affectedRows === 0) {
+ 
+  burger.insertOne(["burger_name", "devoured"], [req.body.name, false], result => {
+     
+    if(result.affectedRows === 0) {
         return res.status(404).end();
       }
       res.status(200).end();
@@ -28,7 +25,9 @@ router.post("/api/burgers", (req, res) => {
 });
 
 router.put("/api/burgers/:id", (req, res) => {
+
   const condition = `id = ${req.params.id}`;
+
   burger.updateOne({devoured: true}, condition, result => {
     if(result.affectedRows === 0) {
       return res.status(404).end();
