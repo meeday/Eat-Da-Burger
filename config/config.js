@@ -4,7 +4,6 @@ dotenv.config();
 
 module.exports = {
   db:{
-    url:process.env.DATABASE_URL
+    password: process.env.DATABASE_PASSWORD,
   }
 }
-
