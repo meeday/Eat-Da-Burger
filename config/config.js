@@ -4,6 +4,6 @@ dotenv.config();
 
 module.exports = {
   db:{
-    password: process.env.DATABASE_PASSWORD,
+    url: process.env.JAWSDB_URL,
   }
 }
