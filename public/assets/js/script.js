@@ -1,4 +1,4 @@
-// Wait until the DOM is fully loaded before attaching the handlers file
+// await DOM load before handler functions are run
 $(() => {
 
   
