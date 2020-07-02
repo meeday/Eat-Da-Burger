@@ -1,9 +1,10 @@
+// express package required into file
 const express = require("express");
-
+// router dependency initialised
 const router = express.Router();
-
+// require burger model into file
 const burger = require("../models/burger.js");
-
+// router.get that directs user to homepage
 router.get("/", (req, res) => {
 
     burger.selectAll(data => {
@@ -13,7 +14,7 @@ router.get("/", (req, res) => {
         res.render("index", hbsObj);
     });
 });
-
+// router.post to post users new burgers to the database
 router.post("/api/burgers", (req, res) => {
     
     console.log(req.body);
@@ -27,7 +28,7 @@ router.post("/api/burgers", (req, res) => {
         res.status(200).end();
     });
 });
-
+// router.put to update devoured boolean to true
 router.put("/api/burgers/:id", (req, res) => {
     
     const condition = `id = ${req.params.id}`;
@@ -41,5 +42,5 @@ router.put("/api/burgers/:id", (req, res) => {
     }
   );
 });
-
+// export router dependency
 module.exports = router;
