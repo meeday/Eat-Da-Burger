@@ -1,7 +1,7 @@
-
+// connection variable required into file
 const connection = require("./connection.js");
 
-
+// helper functions for generating mysql syntax 
 const questionMarksString = num => {
   let str = "";
 
@@ -15,7 +15,7 @@ const questionMarksString = num => {
 
   return str;
 };
-
+// helper functions for generating mysql syntax
 const objToSqlString = obj => {
   const arr = [];
 
@@ -32,8 +32,9 @@ const objToSqlString = obj => {
 
   return arr.toString();
 };
-
+// orm object containing all the sql queries
 const orm = {
+  // selectAll function to select all from burgers table
     selectAll: (table, cb) => {
 
         const queryString = `SELECT * FROM ${table};`;
@@ -46,7 +47,7 @@ const orm = {
             cb(result);
         });
     },
-    
+    // insertOne function to create a new burger entry
     insertOne: (table, cols, vals, cb) => {
         
         const queryQuestionMarks = questionMarksString(vals.length);
@@ -63,7 +64,7 @@ const orm = {
         });
     },
     
-    
+    // updateOne function to update burger from not devoured to devoured
     updateOne: (table, objColVals, condition, cb) => {
         
         const objColValsString = objToSqlString(objColVals);
@@ -81,5 +82,5 @@ const orm = {
         });
     }
 };
-
+// export orm object
 module.exports = orm;
